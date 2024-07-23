@@ -8,10 +8,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _speed;
     private Rigidbody2D _body;
     private bool _isOnGround;
+    Animator animator;
 
     private void Awake()
     {
        _body = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -24,17 +26,19 @@ public class PlayerController : MonoBehaviour
 
         if (_horizontalInput > 0.01f)
         {
-            transform.localScale = Vector3.one;
+            transform.localScale = new Vector3 (1.5f, 1.5f, 1.5f);
+            animator.SetBool("Is running", Mathf.Abs(_horizontalInput) >= 0.1f);
         }
         else if (_horizontalInput < -0.01f)
         {
-            transform.localScale = new Vector3(-1, 1, 1);
+            transform.localScale = new Vector3(-1.5f, 1.5f, 1.5f);
+            animator.SetBool("Is running", Mathf.Abs(_horizontalInput) >= 0.1f);
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.CompareTag("Ground"))
+        if (collision.collider.CompareTag("Destructable"))
         {
             _isOnGround = true;
         }
@@ -42,7 +46,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.collider.CompareTag("Ground"))
+        if (collision.collider.CompareTag("Destructable"))
         {
             _isOnGround = false;
         }
