@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -41,6 +42,7 @@ public class PlayerController : MonoBehaviour
         }
         if (!_isOnGround && _candoubleJump && Input.GetKeyDown(KeyCode.Space)) 
         {
+            gameObject.transform.GetChild(0).GetComponent<Animator>().SetTrigger("Jumping");
             _candoubleJump = false;
             _body.velocity = new Vector2(_body.velocity.x, _speed);
             _camera.GetComponent<ChangePostProcessing>().colorFilter -= new Vector3(0, 3, 0);
@@ -74,7 +76,8 @@ public class PlayerController : MonoBehaviour
         {
             _isOnGround = true;
             _candoubleJump = false;
-            animator.SetBool("Is Jumping", false);
+            animator.SetBool("Is Jumping", false); 
+            //gameObject.transform.GetChild(0).GetComponent<Animator>().SetTrigger("Jumping");
         }
     }
 
