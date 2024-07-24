@@ -24,7 +24,7 @@ public class Wand : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && isReloading == false)
         {
-            _colorFilter.y -= 12;
+            _colorFilter.y -= 8;
             _camera.GetComponent<ChangePostProcessing>().colorFilter += _colorFilter;
             _gameManager.GetComponent<GameManager>().decayProgress += _decayProgressFill;
             GameObject pellet = Instantiate(projectile, shotPoint.position, transform.rotation);
