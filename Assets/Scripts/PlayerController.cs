@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
@@ -18,7 +19,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
        _body = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
+       animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -28,14 +29,18 @@ public class PlayerController : MonoBehaviour
         float _horizontalInput = Input.GetAxis("Horizontal");
         _body.velocity = new Vector2(_horizontalInput * _speed, _body.velocity.y);
 
-
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene(1);
+        }
         if(Input.GetKeyDown(KeyCode.Space) && _isOnGround)
         {
             _candoubleJump = true;
             _body.velocity = new Vector2(_body.velocity.x, _speed);
+            animator.SetBool("Is Jumping", true);
         }
         if (!_isOnGround && _candoubleJump && Input.GetKeyDown(KeyCode.Space)) 
-        {         
+        {
             _candoubleJump = false;
             _body.velocity = new Vector2(_body.velocity.x, _speed);
             _camera.GetComponent<ChangePostProcessing>().colorFilter -= new Vector3(0, 3, 0);
@@ -65,18 +70,19 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.CompareTag("Destructable"))
+        if (collision.collider.CompareTag("Ground"))
         {
             _isOnGround = true;
             _candoubleJump = false;
+            animator.SetBool("Is Jumping", false);
         }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.collider.CompareTag("Destructable"))
+        if (collision.collider.CompareTag("Ground"))
         {
-            _isOnGround = false;
+            _isOnGround = false;          
         }
     }
 
@@ -91,4 +97,5 @@ public class PlayerController : MonoBehaviour
         WeaponScaler.y *= -1;
         GameObject.FindGameObjectWithTag("Wand").GetComponent<Transform>().localScale = WeaponScaler;
     }
+
 }

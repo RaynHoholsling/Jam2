@@ -7,10 +7,6 @@ public class Projectile : MonoBehaviour
     public float velocity;
     public int damage;
 
-    private void Start()
-    {
-        //ExplosionDamage();
-    }
 
     private void Update()
     {
@@ -25,26 +21,12 @@ public class Projectile : MonoBehaviour
     {
         if ((collision.collider != null) && (collision.collider.CompareTag("Player") == false))
         {
-            if (collision.gameObject.CompareTag("Destructable"))
+            if (collision.gameObject.CompareTag("Enemy"))
             {
-                //ExplosionDamage();
                 Destroy(collision.gameObject);
             }
             Destroy(gameObject);
         }
     }
-    //void ExplosionDamage()
-    //{
-    //    Collider2D[] collider2D = Physics2D.OverlapCircleAll(transform.position, 1);
-    //    if (collider2D.Length > 0)
-    //    {
-    //        foreach (Collider2D col in collider2D)
-    //        {
-    //            if (col.tag == "Destructable")
-    //            {
-    //                Destroy(col.gameObject);
-    //            }
-    //        }
-    //    }
-    //}
+
 }

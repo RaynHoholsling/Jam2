@@ -5,8 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
-  - Destructable
   - Wand
+  - HP
+  - Enemy
   layers:
   - Default
   - TransparentFX
