@@ -1,12 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
+using UnityEngine.Rendering.PostProcessing;
 
 public class Wand : MonoBehaviour
 {
     [SerializeField] private bool isReloading = false;
     [SerializeField] private GameObject projectile;
     [SerializeField] private Transform shotPoint;
+    [SerializeField] private float _decayProgressFill;
+    [SerializeField] private GameObject _gameManager;
+    [SerializeField] private GameObject _camera;
+    [SerializeField] private Vector3 _colorFilter;
+
 
     void Update()
     {
@@ -17,10 +24,14 @@ public class Wand : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) && isReloading == false)
         {
+            _colorFilter.y -= 12;
+            _camera.GetComponent<ChangePostProcessing>().colorFilter += _colorFilter;
+            _gameManager.GetComponent<GameManager>().decayProgress += _decayProgressFill;
             GameObject pellet = Instantiate(projectile, shotPoint.position, transform.rotation);
             StartCoroutine(Reloading());
         }
     }
+
     IEnumerator Reloading()
     {
         isReloading = true;

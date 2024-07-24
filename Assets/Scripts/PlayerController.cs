@@ -9,6 +9,11 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _body;
     private bool _isOnGround;
     Animator animator;
+    private bool _facingRight = true;
+    [SerializeField] private GameObject _camera;
+    [SerializeField] private GameObject _gameManager;
+    [SerializeField] private int _decayProgressFillOnDoubleJump;
+    private bool _candoubleJump = false;
 
     private void Awake()
     {
@@ -18,21 +23,43 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
         float _horizontalInput = Input.GetAxis("Horizontal");
         _body.velocity = new Vector2(_horizontalInput * _speed, _body.velocity.y);
 
+
         if(Input.GetKeyDown(KeyCode.Space) && _isOnGround)
+        {
+            _candoubleJump = true;
             _body.velocity = new Vector2(_body.velocity.x, _speed);
+        }
+        if (!_isOnGround && _candoubleJump && Input.GetKeyDown(KeyCode.Space)) 
+        {         
+            _candoubleJump = false;
+            _body.velocity = new Vector2(_body.velocity.x, _speed);
+            _camera.GetComponent<ChangePostProcessing>().colorFilter -= new Vector3(0, 3, 0);
+            _gameManager.GetComponent<GameManager>().decayProgress += _decayProgressFillOnDoubleJump;
+        }
+
 
         if (_horizontalInput > 0.01f)
         {
-            transform.localScale = new Vector3 (1.5f, 1.5f, 1.5f);
             animator.SetBool("Is running", Mathf.Abs(_horizontalInput) >= 0.1f);
         }
         else if (_horizontalInput < -0.01f)
         {
-            transform.localScale = new Vector3(-1.5f, 1.5f, 1.5f);
             animator.SetBool("Is running", Mathf.Abs(_horizontalInput) >= 0.1f);
+        }
+
+
+        if (!_facingRight && mousePosition.x > transform.position.x)
+        {
+            Flip();
+        }
+        else if (_facingRight && mousePosition.x < transform.position.x)
+        {
+            Flip();
         }
     }
 
@@ -41,6 +68,7 @@ public class PlayerController : MonoBehaviour
         if (collision.collider.CompareTag("Destructable"))
         {
             _isOnGround = true;
+            _candoubleJump = false;
         }
     }
 
@@ -50,5 +78,17 @@ public class PlayerController : MonoBehaviour
         {
             _isOnGround = false;
         }
+    }
+
+    private void Flip()
+    {
+        _facingRight = !_facingRight;
+        Vector3 Scaler = transform.localScale;
+        Vector3 WeaponScaler = GameObject.FindGameObjectWithTag("Wand").GetComponent<Transform>().localScale;
+        Scaler.x *= -1;
+        transform.localScale = Scaler;
+        WeaponScaler.x *= -1;
+        WeaponScaler.y *= -1;
+        GameObject.FindGameObjectWithTag("Wand").GetComponent<Transform>().localScale = WeaponScaler;
     }
 }
