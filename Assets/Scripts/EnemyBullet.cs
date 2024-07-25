@@ -40,4 +40,9 @@ public class EnemyBullet : MonoBehaviour
             Destroy(collision.gameObject);
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Destroy(gameObject);
+    }
 }

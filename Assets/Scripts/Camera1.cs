@@ -16,7 +16,7 @@ public class Camera1 : MonoBehaviour
         }
         if(GameObject.FindGameObjectWithTag("Player") != null)
         {
-            transform.position = new Vector3(player.transform.position.x, player.transform.position.y, -20);
+            transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 2, -20);
         }
                
     }

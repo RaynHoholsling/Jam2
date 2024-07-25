@@ -47,7 +47,7 @@ public class Wand : MonoBehaviour
     IEnumerator Reloading()
     {
         isReloading = true;
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(3.5f);
         isReloading = false;
     }
 }
