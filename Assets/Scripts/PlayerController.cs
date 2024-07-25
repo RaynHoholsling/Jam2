@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject _gameManager;
     [SerializeField] private int _decayProgressFillOnDoubleJump;
     private bool _candoubleJump = false;
+    [SerializeField] private AudioSource _jumpSound;
+    [SerializeField] private AudioSource _doubleJumpSound;
 
     private void Awake()
     {
@@ -39,6 +41,7 @@ public class PlayerController : MonoBehaviour
             _candoubleJump = true;
             _body.velocity = new Vector2(_body.velocity.x, _speed);
             animator.SetBool("Is Jumping", true);
+            _jumpSound.Play();
         }
         if (!_isOnGround && _candoubleJump && Input.GetKeyDown(KeyCode.Space)) 
         {
@@ -47,6 +50,7 @@ public class PlayerController : MonoBehaviour
             _body.velocity = new Vector2(_body.velocity.x, _speed);
             _camera.GetComponent<ChangePostProcessing>().colorFilter -= new Vector3(0, 3, 0);
             _gameManager.GetComponent<GameManager>().decayProgress += _decayProgressFillOnDoubleJump;
+            _doubleJumpSound.Play();
         }
 
 

@@ -13,7 +13,7 @@ public class Wand : MonoBehaviour
     [SerializeField] private GameObject _gameManager;
     [SerializeField] private GameObject _camera;
     [SerializeField] private Vector3 _colorFilter;
-
+    [SerializeField] private AudioSource _shotSound;
 
     void Update()
     {
@@ -28,6 +28,7 @@ public class Wand : MonoBehaviour
             _camera.GetComponent<ChangePostProcessing>().colorFilter += _colorFilter;
             _gameManager.GetComponent<GameManager>().decayProgress += _decayProgressFill;
             GameObject pellet = Instantiate(projectile, shotPoint.position, transform.rotation);
+            _shotSound.Play();
             StartCoroutine(Reloading());
         }
     }

@@ -6,6 +6,7 @@ public class Projectile : MonoBehaviour
 {
     public float velocity;
     public int damage;
+    //[SerializeField] private AudioSource _projectileSound;
 
 
     private void Update()
@@ -25,6 +26,7 @@ public class Projectile : MonoBehaviour
             {
                 Destroy(collision.gameObject);
             }
+            //_projectileSound.Play();
             Destroy(gameObject);
         }
     }
