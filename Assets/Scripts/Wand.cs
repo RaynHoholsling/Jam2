@@ -14,7 +14,11 @@ public class Wand : MonoBehaviour
     [SerializeField] private GameObject _camera;
     [SerializeField] private Vector3 _colorFilter;
     [SerializeField] private AudioSource _shotSound;
-
+    Animator animator;
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
     void Update()
     {
         Vector3 difference = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
@@ -30,9 +34,16 @@ public class Wand : MonoBehaviour
             GameObject pellet = Instantiate(projectile, shotPoint.position, transform.rotation);
             _shotSound.Play();
             StartCoroutine(Reloading());
+            StartCoroutine(Shooting());
+
         }
     }
-
+    IEnumerator Shooting()
+    {
+        animator.SetBool("Shooting", true);
+        yield return new WaitForSeconds(0.5f);
+        animator.SetBool("Shooting", false);
+    }
     IEnumerator Reloading()
     {
         isReloading = true;

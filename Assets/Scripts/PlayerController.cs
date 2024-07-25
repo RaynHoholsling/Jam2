@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(4);
         }
         if(Input.GetKeyDown(KeyCode.Space) && _isOnGround)
         {
@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
         }
         if (!_isOnGround && _candoubleJump && Input.GetKeyDown(KeyCode.Space)) 
         {
-            gameObject.transform.GetChild(0).GetComponent<Animator>().SetTrigger("Jumping");
+            gameObject.transform.GetChild(0).GetComponent<Animator>().SetBool("Jumping", true);
             _candoubleJump = false;
             _body.velocity = new Vector2(_body.velocity.x, _speed);
             _camera.GetComponent<ChangePostProcessing>().colorFilter -= new Vector3(0, 3, 0);
@@ -72,6 +72,11 @@ public class PlayerController : MonoBehaviour
         {
             Flip();
         }
+        if (gameObject == null)
+        {
+            string currentSceneName = SceneManager.GetActiveScene().name;
+            SceneManager.LoadScene(currentSceneName);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -80,8 +85,15 @@ public class PlayerController : MonoBehaviour
         {
             _isOnGround = true;
             _candoubleJump = false;
-            animator.SetBool("Is Jumping", false); 
-            //gameObject.transform.GetChild(0).GetComponent<Animator>().SetTrigger("Jumping");
+            animator.SetBool("Is Jumping", false);
+            gameObject.transform.GetChild(0).GetComponent<Animator>().SetBool("Jumping", false);
+        }      
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Death Zone"))
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -104,5 +116,4 @@ public class PlayerController : MonoBehaviour
         WeaponScaler.y *= -1;
         GameObject.FindGameObjectWithTag("Wand").GetComponent<Transform>().localScale = WeaponScaler;
     }
-
 }
