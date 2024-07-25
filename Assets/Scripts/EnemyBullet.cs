@@ -39,10 +39,9 @@ public class EnemyBullet : MonoBehaviour
             Destroy(gameObject);
             Destroy(collision.gameObject);
         }
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        Destroy(gameObject);
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            Destroy(gameObject);
+        }
     }
 }
