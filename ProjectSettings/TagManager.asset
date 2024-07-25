@@ -9,6 +9,7 @@ TagManager:
   - HP
   - Enemy
   - Death Zone
+  - Portal
   layers:
   - Default
   - TransparentFX

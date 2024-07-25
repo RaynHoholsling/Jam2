@@ -32,10 +32,6 @@ public class PlayerController : MonoBehaviour
         float _horizontalInput = Input.GetAxis("Horizontal");
         _body.velocity = new Vector2(_horizontalInput * _speed, _body.velocity.y);
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            SceneManager.LoadScene(4);
-        }
         if(Input.GetKeyDown(KeyCode.Space) && _isOnGround)
         {
             _candoubleJump = true;
@@ -94,6 +90,10 @@ public class PlayerController : MonoBehaviour
         if (collision.CompareTag("Death Zone"))
         {
             Destroy(gameObject);
+        }
+        if (collision.CompareTag("Portal"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
 
